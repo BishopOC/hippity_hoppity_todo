@@ -1,6 +1,6 @@
 var todoApp = {
   todos: [], //our data source/store
-  init: function(){
+  start: function(){
     todoApp.cacheDom();
     todoApp.addEventListeners();
     todoApp.render();
@@ -13,13 +13,19 @@ var todoApp = {
     todoApp.list = document.querySelector('#list');
   },
   render: function(){
-    console.log(todoApp.todos);
     var listItemsFromTodos = todoApp.todos
-                                 .map(function(todo){
-                                   return `<li>${todo.task}:  (${todo.date})  [${todo.category}]</li>`;
-                                 })
+                                 .map(todoApp.createListItem)
                                  .join('');
     todoApp.list.innerHTML = listItemsFromTodos;
+    var deleteButtons = document.querySelectorAll('.delete');
+    deleteButtons.forEach(function(button){
+      button.addEventListener('click', todoApp.removeTodo);
+    });
+  },
+  createListItem: function(todo, index){
+    return `<li data-index='${index}'>${todo.task}: (${todo.date}) [${todo.category}]
+            <button class='delete'>x</button>
+            </li>`;
   },
   addEventListeners: function(){
     todoApp.createButton.addEventListener('click', todoApp.addTodo);
@@ -34,6 +40,15 @@ var todoApp = {
     todoApp.dateInput.value = '';
     todoApp.categoryInput.value = '';
     todoApp.render();
+  },
+  removeTodo: function(){
+    var element = this;
+    console.log(element); //only refers to the element because we are in an eventhandler
+    var parent = element.parentNode;
+    var index = parent.dataset.index;
+    todoApp.todos.splice(index, 1);
+    todoApp.render();
+
   }
 };
-todoApp.init();
+todoApp.start();
