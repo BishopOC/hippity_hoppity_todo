@@ -42,8 +42,7 @@ var todoApp = {
     todoApp.render();
   },
   removeTodo: function(){
-    var element = this;
-    console.log(element); //only refers to the element because we are in an eventhandler
+    var element = this; //only refers to the element because we are in an eventhandler
     var parent = element.parentNode;
     var index = parent.dataset.index;
     todoApp.todos.splice(index, 1);
